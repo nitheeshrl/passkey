@@ -109,6 +109,9 @@ let findresult ;
 console.log(userId)
 var conn = mongoose.connection;
     findresult = await conn.collection('Users').findOne({name: userId, devUniId:devUniId});
+        if (findresult == null){
+        return res.json({ success: false, userId })
+    }
     var key = new Uint8Array(findresult.passkey.credentialPublicKey.buffer);
     console.log(key)
 
