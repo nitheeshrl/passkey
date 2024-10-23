@@ -13,11 +13,27 @@ console.log(`the db is connect with ${mongoose.connection.host}`)
 }
 conenctDB()
 function timeout(){
-    for(var i = 35; i>0;i--){
-    console.log("Delay timeout in "+i)
-    }
+    var i = 30;
+
+function startTimer() {
+
+    var countdownTimer = setInterval(function() {
+
+        console.log("Delay timeout in "+i);
+        i = i - 1;
+
+        if (i <= 0) {
+            clearTimeout(countdownTimer);
+        }
+
+    }, 1000);
+
+}
+    startTimer()
+    
 }
 setInterval(timeout,14.5*60*1000);
+startTimer()
 const { 
     generateRegistrationOptions, 
     verifyRegistrationResponse, 
