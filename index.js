@@ -33,7 +33,7 @@ function startTimer() {
     
 }
 setInterval(timeout,14.5*60*1000);
-startTimer()
+timeout()
 const { 
     generateRegistrationOptions, 
     verifyRegistrationResponse, 
