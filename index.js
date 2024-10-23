@@ -13,7 +13,7 @@ console.log(`the db is connect with ${mongoose.connection.host}`)
 }
 conenctDB()
 function timeout(){
-    for(var i = 31; i>0;i--){
+    for(var i = 35; i>0;i--){
     console.log("Delay timeout in "+i)
     }
 }
