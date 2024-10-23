@@ -32,7 +32,7 @@ function startTimer() {
     startTimer()
     
 }
-setInterval(timeout,14.5*60*1000);
+setInterval(timeout,13*60*1000);
 timeout()
 const { 
     generateRegistrationOptions, 
