@@ -3,6 +3,7 @@ const crypto = require("node:crypto");
 const base64url = require('base64url');
 const mongoose = require ("mongoose")
 const Binary = require('binary')
+
 const url = 'mongodb+srv://niftem:Niftem%40iac@niftem-t.lnsqf.mongodb.net/User-Passkey';
 const conenctDB = async()=>{
 await mongoose.connect (url)
@@ -12,34 +13,21 @@ console.log(`the db is connect with ${mongoose.connection.host}`)
 
 }
 conenctDB()
+
 function timeout(){
-    var i = 30;
-
-function startTimer() {
-
-    var countdownTimer = setInterval(function() {
-
-        console.log("Delay timeout in "+i);
-        i = i - 1;
-
-        if (i <= 0) {
-            clearTimeout(countdownTimer);
-        }
-
-    }, 1000);
-
+    var exec = require('child_process').exec;
+    exec("ping passkey-5ev6.onrender.com", function (err, stdout, stderr) {
+        console.log(stdout);
+    });
 }
-    startTimer()
-    
-}
-setInterval(timeout,13*60*1000);
-timeout()
+setInterval(timeout,10*60*1000);
 const { 
     generateRegistrationOptions, 
     verifyRegistrationResponse, 
     generateAuthenticationOptions, 
     verifyAuthenticationResponse 
 } = require('@simplewebauthn/server')
+
 
 const cors=require("cors");
 const corsOptions ={
@@ -60,6 +48,8 @@ app.use(express.json())
 const userStore = {}
 
 const challengeStore = {}
+
+
 app.post('/register-challenge', async (req, res) => {
     const { username, weburl } = req.body
 
