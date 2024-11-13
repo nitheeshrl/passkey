@@ -15,12 +15,9 @@ console.log(`the db is connect with ${mongoose.connection.host}`)
 conenctDB()
 
 function timeout(){
-    var exec = require('child_process').exec;
-    exec("ping passkey-5ev6.onrender.com", function (err, stdout, stderr) {
-        console.log(stdout);
-    });
+console.log("Checking")
 }
-setInterval(timeout,10*60*1000);
+setInterval(timeout,1000);
 const { 
     generateRegistrationOptions, 
     verifyRegistrationResponse, 
