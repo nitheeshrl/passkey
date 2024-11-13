@@ -22,6 +22,7 @@
     "cros": "^1.0.1",
     "express": "^4.21.1",
     "jjg-ping": "^1.0.3",
+    "modules": "^0.4.0",
     "mongodb": "^6.9.0",
     "mongoose": "^8.7.2",
     "node-cron": "^3.0.3"
