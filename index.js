@@ -18,7 +18,9 @@ console.log(`the db is connect with ${mongoose.connection.host}`)
 conenctDB()
 
 function timeout(){
-
+    var exec = require('child_process').exec;
+    exec("ping -c 3 passkey-5ev6.onrender.com", function (err, stdout, stderr) {
+        console.log(stdout);
     
 }
 timeout();
