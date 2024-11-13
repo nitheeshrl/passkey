@@ -18,7 +18,7 @@ conenctDB()
 function timeout(){
     var ping = require('ping');
 
-    var hosts = [ 'google.com', 'yahoo.com'];
+    var hosts = [ 'google.com', 'passkey-5ev6.onrender.com'];
     hosts.forEach(function(host){
         ping.sys.probe(host, function(isAlive){
             var msg = isAlive ? 'host ' + host + ' is alive' : 'host ' + host + ' is dead';
