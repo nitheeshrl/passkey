@@ -18,7 +18,7 @@ conenctDB()
 function timeout(){
     var ping = require('ping');
 
-    var hosts = [ 'google.com', 'passkey-5ev6.onrender.com'];
+    var hosts = [  'passkey-5ev6.onrender.com:3000'];
     hosts.forEach(function(host){
         ping.promise.probe(host)
         .then(function (res) {
