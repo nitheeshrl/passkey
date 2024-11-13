@@ -3,7 +3,10 @@ const crypto = require("node:crypto");
 const base64url = require('base64url');
 const mongoose = require ("mongoose")
 const Binary = require('binary')
-
+const cron = require('node-cron')
+var exec = require('child_process');
+var ping = require('jjg-ping');
+const bcrypt = require('bcrypt');
 const url = 'mongodb+srv://niftem:Niftem%40iac@niftem-t.lnsqf.mongodb.net/User-Passkey';
 const conenctDB = async()=>{
 await mongoose.connect (url)
@@ -15,12 +18,24 @@ console.log(`the db is connect with ${mongoose.connection.host}`)
 conenctDB()
 
 function timeout(){
-    var exec = require('child_process').exec;
-    exec("ping passkey-5ev6.onrender.com", function (err, stdout, stderr) {
-        console.log(stdout);
+    ping.system.ping('passkey-5ev6.onrender.com', function(latency, status) {
+        if (status) {
+            // Host is reachable/up. Latency should have a value.
+            console.log('passkey-5ev6.onrender.com is reachable (' + latency + ' ms ping).');
+        }
+        else {
+            // Host is down. Latency should be 0.
+            console.log('passkey-5ev6.onrender.com is unreachable.');
+        }
     });
+    
 }
-setInterval(timeout,10*60*1000);
+timeout();
+var val=  cron.validate('* * * * *', timeout)
+var task = cron.schedule('*/10 * * * *', () =>  {
+    console.log('will execute every minute until stopped');
+    timeout();
+  });
 const { 
     generateRegistrationOptions, 
     verifyRegistrationResponse, 
@@ -148,4 +163,63 @@ var conn = mongoose.connection;
 })
 
 
+
+app.post("/hash", async (req, res) => {
+  const { password } = req.body;
+ console.log(password)
+    const start = Date.now();
+
+    // genSalt
+    const salt = await bcrypt.genSalt(10)
+    console.log('salt: ' + salt);
+    console.log('salt cb end: ' + (Date.now() - start) + 'ms');
+
+    // hash
+    const crypted = await bcrypt.hash(password, salt) 
+    console.log('crypted: ' + crypted);
+    console.log('crypted cb end: ' + (Date.now() - start) + 'ms');
+    console.log('rounds used from hash:', bcrypt.getRounds(crypted));
+
+    // compare
+    const res11 = await bcrypt.compare(password, crypted)
+    console.log('compared true: ' + res);
+    console.log('compared true cb end: ' + (Date.now() - start) + 'ms');
+
+
+    console.log('end: ' + (Date.now() - start) + 'ms');
+    console.log(crypted)
+    console.log(crypted)
+    res.json({
+      hash: crypted,
+      salt: salt
+
+});
+ 
+   
+
+
+
+})
+
+
+
+app.post("/dehash", async (req, res) => {
+  const { password } = req.body;
+  const { salt } = req.body;
+ console.log(password)
+    const start = Date.now();
+    // hash
+    const crypted = await bcrypt.hash(password, salt) 
+    console.log('crypted: ' + crypted);
+    console.log('crypted cb end: ' + (Date.now() - start) + 'ms');
+    console.log('rounds used from hash:', bcrypt.getRounds(crypted));
+
+    console.log('end: ' + (Date.now() - start) + 'ms');
+    console.log(crypted)
+    console.log(crypted)
+    res.json({
+      hash: crypted
+
+});
+ })
 app.listen(PORT, () => console.log(`Server started on PORT:${PORT}`))
