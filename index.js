@@ -13,7 +13,12 @@ console.log(`the db is connect with ${mongoose.connection.host}`)
 
 }
 conenctDB()
+var http = require('http');
 
+http.createServer(function (req, res) {
+    res.writeHead(200, {'Content-Type': 'text/plain'});
+    res.end('Hello World!');
+}).listen(8080);
 function timeout(){
 console.log("Checking")
 }
