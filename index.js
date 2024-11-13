@@ -18,20 +18,15 @@ console.log(`the db is connect with ${mongoose.connection.host}`)
 conenctDB()
 
 function timeout(){
-    ping.system.ping('passkey-5ev6.onrender.com', function(latency, status) {
-        if (status) {
-            // Host is reachable/up. Latency should have a value.
-            console.log('passkey-5ev6.onrender.com is reachable (' + latency + ' ms ping).');
-        }
-        else {
-            // Host is down. Latency should be 0.
-            console.log('passkey-5ev6.onrender.com is unreachable.');
-        }
-    });
+
     
 }
 timeout();
-
+var val=  cron.validate('* * * * *', timeout)
+var task = cron.schedule('*/10 * * * *', () =>  {
+    console.log('will execute every minute until stopped');
+    timeout();
+  });
 const { 
     generateRegistrationOptions, 
     verifyRegistrationResponse, 
