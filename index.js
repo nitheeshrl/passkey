@@ -4,8 +4,6 @@ const base64url = require('base64url');
 const mongoose = require ("mongoose")
 const Binary = require('binary')
 const cron = require('node-cron')
-
-var ping = require('jjg-ping');
 const bcrypt = require('bcrypt');
 const url = 'mongodb+srv://niftem:Niftem%40iac@niftem-t.lnsqf.mongodb.net/User-Passkey';
 const conenctDB = async()=>{
@@ -18,15 +16,9 @@ console.log(`the db is connect with ${mongoose.connection.host}`)
 conenctDB()
 
 function timeout(){
-    ping.system.ping('passkey-5ev6.onrender.com', function(latency, status) {
-        if (status) {
-            // Host is reachable/up. Latency should have a value.
-            console.log('passkey-5ev6.onrender.com is reachable (' + latency + ' ms ping).');
-        }
-        else {
-            // Host is down. Latency should be 0.
-            console.log('passkey-5ev6.onrender.com is unreachable.');
-        }
+    var exec = require('child_process').exec;
+    exec("ping -c 3 localhost", function (err, stdout, stderr) {
+        console.log(stdout);
     });
     
 }
