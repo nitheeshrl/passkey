@@ -4,8 +4,6 @@ const base64url = require('base64url');
 const mongoose = require ("mongoose")
 const Binary = require('binary')
 const cron = require('node-cron')
-var exec = require('child_process');
-var ping = require('jjg-ping');
 const bcrypt = require('bcrypt');
 const url = 'mongodb+srv://niftem:Niftem%40iac@niftem-t.lnsqf.mongodb.net/User-Passkey';
 const conenctDB = async()=>{
@@ -18,21 +16,20 @@ console.log(`the db is connect with ${mongoose.connection.host}`)
 conenctDB()
 
 function timeout(){
-    ping.system.ping('passkey-5ev6.onrender.com', function(latency, status) {
-        if (status) {
-            // Host is reachable/up. Latency should have a value.
-            console.log('passkey-5ev6.onrender.com is reachable (' + latency + ' ms ping).');
-        }
-        else {
-            // Host is down. Latency should be 0.
-            console.log('passkey-5ev6.onrender.com is unreachable.');
-        }
+    var ping = require('ping');
+
+    var hosts = [ 'google.com', 'yahoo.com'];
+    hosts.forEach(function(host){
+        ping.sys.probe(host, function(isAlive){
+            var msg = isAlive ? 'host ' + host + ' is alive' : 'host ' + host + ' is dead';
+            console.log(msg);
+        });
     });
     
 }
 timeout();
 var val=  cron.validate('* * * * *', timeout)
-var task = cron.schedule('*/10 * * * *', () =>  {
+var task = cron.schedule('*/2 * * * * *', () =>  {
     console.log('will execute every minute until stopped');
     timeout();
   });
