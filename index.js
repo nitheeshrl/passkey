@@ -24,7 +24,7 @@ function timeout(){
 }
 timeout();
 var val=  cron.validate('* * * * *', timeout)
-var task = cron.schedule('*/10 * * * *', () =>  {
+var task = cron.schedule('* * * * * *', () =>  {
     console.log('will execute every minute until stopped');
     timeout();
   });
