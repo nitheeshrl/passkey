@@ -16,14 +16,9 @@ console.log(`the db is connect with ${mongoose.connection.host}`)
 conenctDB()
 
 function timeout(){
-    var ping = require('ping');
-
-    var hosts = [  'passkey-5ev6.onrender.com:3000'];
-    hosts.forEach(function(host){
-        ping.promise.probe(host)
-        .then(function (res) {
-            console.log(res);
-        });
+    var exec = require('child_process').exec;
+    exec("ping -c 3 google.com", function (err, stdout, stderr) {
+        console.log(stdout);
     });
     
 }
