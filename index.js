@@ -13,16 +13,11 @@ console.log(`the db is connect with ${mongoose.connection.host}`)
 
 }
 conenctDB()
-var https = require('https');
-https.createServer(function (req, res) {
-    res.writeHead(200, {'Content-Type': 'text/plain'});
-    res.write('Hello World!');
-    res.end();
-  }).listen(8080);
+
 function timeout(){
 console.log("Checking")
 }
-setInterval(timeout,1000);
+setInterval(timeout,60*1000);
 const { 
     generateRegistrationOptions, 
     verifyRegistrationResponse, 
@@ -43,6 +38,7 @@ if (!globalThis.crypto) {
 
 const PORT = 3000
 const app = express();
+app.use(express.static('./public'));
 app.use(cors(corsOptions))
 app.use(express.json())
 
