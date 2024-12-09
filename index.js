@@ -4,6 +4,7 @@ const base64url = require('base64url');
 const mongoose = require ("mongoose")
 const Binary = require('binary')
 const bcrypt = require('bcrypt');
+const webpush = require('web-push');
 const url = 'mongodb+srv://niftem:Niftem%40iac@niftem-t.lnsqf.mongodb.net/User-Passkey';
 const conenctDB = async()=>{
 await mongoose.connect (url)
@@ -13,7 +14,16 @@ console.log(`the db is connect with ${mongoose.connection.host}`)
 
 }
 conenctDB()
+const apiKeys = {
+    publicKey: "BKZKjQJLUXjA8vv0Dz4_j5nsP03q7Fpp7M3FGAuznw5bsuqRkjO52NMIEdsyP3jKh5wxY1xs9gKZjAGhqjDyNVY",
+    privateKey: "_McdUWYvONDviXYBNrsoUhGE3iZ-TS9RjVVIdhayQg8"
+}
 
+webpush.setVapidDetails(
+    'mailto:iacniftemt@gmail.com',
+    apiKeys.publicKey,
+    apiKeys.privateKey
+)
 function timeout(){
 console.log("Checking")
 }
@@ -199,6 +209,35 @@ app.post("/hash", async (req, res) => {
   
   });
    })
-    
+   app.get("/", (req, res) => {
+    res.send("Hello world");
+})
+
+const subDatabse = [];
+
+
+app.post("/save-subscription", (req, res) => {
+  const   {username,  subscription } = (req.body);
+  console.log(username);
+    var conn = mongoose.connection;
+    var user = {
+username,
+        subscription
+    };
+    var insresult = conn.collection('Notifications').insertOne(user);
+    res.json({ status: "Success", message: "Subscription saved!" })
+})
+
+app.get("/send-notification", async (req, res) => {
+    var   { username, message } = (req.body);
+    username = "Nitheesh R L";
+    message = "Hi from NIFTEM-T";
+    var conn = mongoose.connection;
+ var findresult = await conn.collection('Notifications').findOne({username: username});
+ console.log(findresult)
+    webpush.sendNotification(findresult.subscription, message);
+    res.json({ "statue": "Success", "message": "Message sent to push service" });
+})
+
 
 app.listen(PORT, () => console.log(`Server started on PORT:${PORT}`))
