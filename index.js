@@ -242,6 +242,7 @@ res.json({ status: "Duplicate", message: "Already Saved!" })
 
 app.post("/send-notification", async (req, res) => {
     var   { username, message } = (req.body);
+    console.log(username,message)
     var results = [];   
     var conn = mongoose.connection;
  var findresult = await conn.collection('Notifications').find({username: username})    ;
