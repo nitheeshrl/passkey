@@ -228,14 +228,21 @@ username,
     res.json({ status: "Success", message: "Subscription saved!" })
 })
 
-app.get("/send-notification", async (req, res) => {
+app.post("/send-notification", async (req, res) => {
     var   { username, message } = (req.body);
-    username = "Nitheesh R L";
-    message = "Hi from NIFTEM-T";
+    var results = [];   
     var conn = mongoose.connection;
- var findresult = await conn.collection('Notifications').findOne({username: username});
- console.log(findresult)
-    webpush.sendNotification(findresult.subscription, message);
+ var findresult = await conn.collection('Notifications').find({username: username})    ;
+ var no = await conn.collection('Notifications').countDocuments({username: username});
+var results = await findresult.toArray();
+   
+if (no !==0){
+
+for ( var result of results){
+    console.log(result)
+    webpush.sendNotification(result.subscription, message);
+}
+}
     res.json({ "statue": "Success", "message": "Message sent to push service" });
 })
 
