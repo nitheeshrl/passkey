@@ -217,14 +217,15 @@ const subDatabse = [];
 
 
 app.post("/save-subscription", async (req, res) => {
-  const   {username,  subscription } = (req.body);
+  const   {username,  subscription, type } = (req.body);
   console.log(username);
     var conn = mongoose.connection;
     var no = await conn.collection('Notifications').countDocuments({subscription: subscription});
     if(no == 0){
     var user = {
 username,
-        subscription
+        subscription,
+        type
     };
 
     var insresult = conn.collection('Notifications').insertOne(user);
@@ -241,12 +242,12 @@ res.json({ status: "Duplicate", message: "Already Saved!" })
 })
 
 app.post("/send-notification", async (req, res) => {
-    var   { username, message } = (req.body);
+    var   { username, message ,type} = (req.body);
     console.log(username,message)
     var results = [];   
     var conn = mongoose.connection;
- var findresult = await conn.collection('Notifications').find({username: username})    ;
- var no = await conn.collection('Notifications').countDocuments({username: username});
+ var findresult = await conn.collection('Notifications').find({username: username, type:type})    ;
+ var no = await conn.collection('Notifications').countDocuments({username: username, type:type});
 var results = await findresult.toArray();
    
 if (no !==0){
