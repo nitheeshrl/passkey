@@ -231,7 +231,13 @@ username,
 
     res.json({ status: "Success", message: "Subscription saved!" })
 }
+else if(no == 1){
+   await conn.collection('Notifications').updateOne({subscription:subscription},{subscription:subscription})   ;
+   res.json({ status: "Updated", message: "Subscription updated!" })
+}
+else{
 res.json({ status: "Duplicate", message: "Already Saved!" })
+}
 })
 
 app.post("/send-notification", async (req, res) => {
