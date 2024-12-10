@@ -226,9 +226,12 @@ app.post("/save-subscription", async (req, res) => {
 username,
         subscription
     };
-}
+
     var insresult = conn.collection('Notifications').insertOne(user);
+
     res.json({ status: "Success", message: "Subscription saved!" })
+}
+res.json({ status: "Duplicate", message: "Already Saved!" })
 })
 
 app.post("/send-notification", async (req, res) => {
