@@ -230,7 +230,7 @@ username,
 
 app.get("/send-notification", async (req, res) => {
     var   { username, message } = (req.body);
-    username = "Nitheesh R L";
+    username = "Anindit Bizy Nair";
     message = "Hi from NIFTEM-T";
     var conn = mongoose.connection;
  var findresult = await conn.collection('Notifications').findOne({username: username});
