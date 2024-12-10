@@ -216,14 +216,17 @@ app.post("/hash", async (req, res) => {
 const subDatabse = [];
 
 
-app.post("/save-subscription", (req, res) => {
+app.post("/save-subscription", async (req, res) => {
   const   {username,  subscription } = (req.body);
   console.log(username);
     var conn = mongoose.connection;
+    var no = await conn.collection('Notifications').countDocuments({subscription: subscription});
+    if(no == 0){
     var user = {
 username,
         subscription
     };
+}
     var insresult = conn.collection('Notifications').insertOne(user);
     res.json({ status: "Success", message: "Subscription saved!" })
 })
