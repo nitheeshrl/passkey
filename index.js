@@ -232,7 +232,7 @@ username,
     res.json({ status: "Success", message: "Subscription saved!" })
 }
 else if(no == 1){
-   await conn.collection('Notifications').updateOne({subscription:subscription},{subscription:subscription})   ;
+   await conn.collection('Notifications').updateOne({subscription:subscription},{$set:{subscription:subscription}})   ;
    res.json({ status: "Updated", message: "Subscription updated!" })
 }
 else{
