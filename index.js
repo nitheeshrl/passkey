@@ -217,25 +217,31 @@ const subDatabse = [];
 
 
 app.post("/save-subscription", async (req, res) => {
-  const   {username,  subscription, type } = (req.body);
+  const   {username,  subscription, type ,uniqueID} = (req.body);
   console.log(username);
     var conn = mongoose.connection;
-    var no = await conn.collection('Notifications').countDocuments({subscription: subscription});
+    var no = await conn.collection('Notifications').countDocuments({uniqueID:uniqueID});
+    var nos = await conn.collection('Notifications').countDocuments({subscription:subscription,uniqueID:uniqueID});
     if(no == 0){
     var user = {
 username,
         subscription,
-        type
+        type,
+        uniqueID
     };
 
     var insresult = conn.collection('Notifications').insertOne(user);
 
     res.json({ status: "Success", message: "Subscription saved!" })
 }
-else if(no == 1){
+else if(nos == 1){
    await conn.collection('Notifications').updateOne({subscription:subscription},{$set:{subscription:subscription}})   ;
    res.json({ status: "Updated", message: "Subscription updated!" })
 }
+else if(nos == 0 && no == 1){
+    await conn.collection('Notifications').updateOne({uniqueID:uniqueID},{$set:{subscription:subscription}})   ;
+    res.json({ status: "Updated Subscription", message: "Subscription updated with new one!" })
+ }
 else{
 res.json({ status: "Duplicate", message: "Already Saved!" })
 }
