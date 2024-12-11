@@ -265,6 +265,19 @@ for ( var result of results){
 }
     res.json({ "statue": "Success", "message": "Message sent to push service" });
 })
+app.post("/delete-notification", async (req, res) => {
+    var   { id } = (req.body);
+    console.log(id)
+    var results = [];   
+    var conn = mongoose.connection;
+ var findresult = await conn.collection('Notifications').find({username: username, type:type})    ;
+ var no = await conn.collection('Notifications').countDocuments({uniqueID:id});
 
+   
+if (no !==0){
+    await conn.collection('Notifications').deleteOne({uniqueID:id})
+}
+    res.json({ "statue": "Success", "message": "Message sent to push service" });
+})
 
 app.listen(PORT, () => console.log(`Server started on PORT:${PORT}`))
