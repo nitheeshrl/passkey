@@ -270,7 +270,7 @@ app.post("/delete-notification", async (req, res) => {
     console.log(id)
     var results = [];   
     var conn = mongoose.connection;
- var findresult = await conn.collection('Notifications').find({username: username, type:type})    ;
+
  var no = await conn.collection('Notifications').countDocuments({uniqueID:id});
 
    
