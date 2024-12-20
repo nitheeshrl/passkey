@@ -56,8 +56,12 @@ app.use(express.json())
 const userStore = {}
 
 const challengeStore = {}
-
-
+app.post('/check-pasakey', async (req, res) => {
+ const { username,  devUniId, weburl}  = req.body
+ var no = await conn.collection('Users').countDocuments({weburl:weburl, name:username,  devUniId:devUniId}; 
+    
+return res.json({ no:no })
+}) 
 app.post('/register-challenge', async (req, res) => {
     const { username, weburl } = req.body
 
