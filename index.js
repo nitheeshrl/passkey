@@ -57,7 +57,8 @@ const userStore = {}
 
 const challengeStore = {}
 app.post('/check-pasakey', async (req, res) => {
- const { username,  devUniId, weburl}  = req.body
+ const { username,  devUniId, weburl}  = req.body;
+    var conn = mongoose.connection;
  var no = await conn.collection('Users').countDocuments({weburl:weburl,name:username,devUniId:devUniId}); 
     
 return res.json({ no:no })
