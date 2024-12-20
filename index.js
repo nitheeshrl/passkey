@@ -111,7 +111,7 @@ app.post('/register-verify', async (req, res) => {
 })
 
 app.post('/login-challenge', async (req, res) => {
-    var { userId, weburl } = req.body
+    var { weburl } = req.body
 
     const opts = await generateAuthenticationOptions({
         rpID: weburl,
@@ -124,15 +124,16 @@ app.post('/login-challenge', async (req, res) => {
 
 
 app.post('/login-verify', async (req, res) => {
-    const { userId, cred, challenge, devUniId, weburl, urlorigin }  = req.body
-let findresult ;
+    const { cred, challenge, devUniId, weburl, urlorigin }  = req.body
+let findresults ;
 console.log(userId)
 var conn = mongoose.connection;
-    findresult = await conn.collection('Users').findOne({name: userId, devUniId:devUniId});
-        if (findresult == null){
-        return res.json({ success: false, userId })
-    }
-    var key = new Uint8Array(findresult.passkey.credentialPublicKey.buffer);
+    findresults = await conn.collection('Users').find({weburl:weburl});
+    var results = await findresults.toArray();
+
+
+for ( var findresult of results){
+ var key = new Uint8Array(findresult.passkey.credentialPublicKey.buffer);
     console.log(key)
 
  userStore[userId] = findresult;
@@ -148,11 +149,14 @@ var conn = mongoose.connection;
             credentialPublicKey: key
         }
     })
+    if (result.verified){
+return res.json({ success: true, userId:findresult.name })
+    }
+}
 
-    if (!result.verified) return res.json({ error: 'something went wrong' })
+return res.json({ error: 'something went wrong' })
     
-    // Login the user: Session, Cookies, JWT
-    return res.json({ success: true, userId })
+
 })
 app.post("/hash", async (req, res) => {
     const { password } = req.body;
