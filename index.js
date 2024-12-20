@@ -126,7 +126,7 @@ app.post('/login-challenge', async (req, res) => {
 app.post('/login-verify', async (req, res) => {
     const { cred, challenge, weburl, urlorigin }  = req.body
 let findresults ;
-console.log(userId)
+
 var conn = mongoose.connection;
     findresults = await conn.collection('Users').find({weburl:weburl});
     var results = await findresults.toArray();
@@ -136,8 +136,7 @@ for ( var findresult of results){
  var key = new Uint8Array(findresult.passkey.credentialPublicKey.buffer);
     console.log(key)
 
- userStore[userId] = findresult;
- var user = userStore[userId]
+
 
     const result = await verifyAuthenticationResponse({
         expectedChallenge: challenge,
@@ -150,6 +149,7 @@ for ( var findresult of results){
         }
     })
     if (result.verified){
+        console.log(findresult.name)
 return res.json({ success: true, userId:findresult.name })
     }
 }
