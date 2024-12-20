@@ -124,7 +124,7 @@ app.post('/login-challenge', async (req, res) => {
 
 
 app.post('/login-verify', async (req, res) => {
-    const { cred, challenge, devUniId, weburl, urlorigin }  = req.body
+    const { cred, challenge, weburl, urlorigin }  = req.body
 let findresults ;
 console.log(userId)
 var conn = mongoose.connection;
