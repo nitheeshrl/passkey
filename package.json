@@ -21,6 +21,7 @@
     "cors": "^2.8.5",
     "cros": "^1.0.1",
     "express": "^4.21.1",
+    "http": "^0.0.1-security",
     "https": "^1.0.0",
     "jjg-ping": "^1.0.3",
     "modules": "^0.4.0",
@@ -28,6 +29,7 @@
     "mongoose": "^8.7.2",
     "node-cron": "^3.0.3",
     "ping": "^0.4.4",
+    "socket.io": "^4.8.1",
     "web-push": "^3.6.7"
   }
 }

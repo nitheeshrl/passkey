@@ -56,8 +56,13 @@ app.use(express.json())
 const userStore = {}
 
 const challengeStore = {}
-
-
+app.post('/check-pasakey', async (req, res) => {
+ const { username,  devUniId, weburl}  = req.body;
+    var conn = mongoose.connection;
+ var no = await conn.collection('Users').countDocuments({weburl:weburl,name:username,devUniId:devUniId}); 
+    console.log(username,no);
+return res.json({ no:no })
+}) 
 app.post('/register-challenge', async (req, res) => {
     const { username, weburl } = req.body
 
@@ -111,7 +116,7 @@ app.post('/register-verify', async (req, res) => {
 })
 
 app.post('/login-challenge', async (req, res) => {
-    var { userId, weburl } = req.body
+    var { weburl } = req.body
 
     const opts = await generateAuthenticationOptions({
         rpID: weburl,
@@ -124,19 +129,19 @@ app.post('/login-challenge', async (req, res) => {
 
 
 app.post('/login-verify', async (req, res) => {
-    const { userId, cred, challenge, devUniId, weburl, urlorigin }  = req.body
-let findresult ;
-console.log(userId)
+    const { cred, challenge, weburl, urlorigin }  = req.body
+let findresults ;
+
 var conn = mongoose.connection;
-    findresult = await conn.collection('Users').findOne({name: userId, devUniId:devUniId});
-        if (findresult == null){
-        return res.json({ success: false, userId })
-    }
-    var key = new Uint8Array(findresult.passkey.credentialPublicKey.buffer);
+    findresults = await conn.collection('Users').find({weburl:weburl});
+    var results = await findresults.toArray();
+
+
+for ( var findresult of results){
+ var key = new Uint8Array(findresult.passkey.credentialPublicKey.buffer);
     console.log(key)
 
- userStore[userId] = findresult;
- var user = userStore[userId]
+
 
     const result = await verifyAuthenticationResponse({
         expectedChallenge: challenge,
@@ -148,11 +153,15 @@ var conn = mongoose.connection;
             credentialPublicKey: key
         }
     })
+    if (result.verified){
+        console.log(findresult.name)
+return res.json({ success: true, userId:findresult.name })
+    }
+}
 
-    if (!result.verified) return res.json({ error: 'something went wrong' })
+return res.json({ error: 'something went wrong' })
     
-    // Login the user: Session, Cookies, JWT
-    return res.json({ success: true, userId })
+
 })
 app.post("/hash", async (req, res) => {
     const { password } = req.body;
@@ -281,3 +290,34 @@ if (no !==0){
 })
 
 app.listen(PORT, () => console.log(`Server started on PORT:${PORT}`))
+
+http = require('http') .Server(express);
+io = require( 'socket.io')(http, {
+    cors: {
+      origin: "*",
+      methods: ["GET", "POST"]
+    }
+  });;
+
+  var onlineUsers= [];
+io. on ('connection', function(socket) {
+//console. log ('A user connected' );
+socket.on("user_connected", (newUserId) => {
+    if (!onlineUsers.some((user) => user.userId === newUserId)) {  
+      // if user is not added before
+      onlineUsers.push({ userId: newUserId, socketId: socket.id });
+      console.log("new user is here!", onlineUsers);
+    }
+    // send all active users to new user
+   // console.log(onlineUsers)
+  });
+  socket.on("disconnect", () => {
+    onlineUsers = onlineUsers.filter((user) => user.socketId !== socket.id)
+    console.log("user disconnected", onlineUsers);
+    // send all online users to all users
+ //   console.log(onlineUsers)
+  });
+});
+http. listen(4000,function() {
+console. log ('listening on *: 4000');
+});
