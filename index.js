@@ -289,7 +289,7 @@ if (no !==0){
     res.json({ "statue": "Success", "message": "Message sent to push service" });
 })
 
-//app.listen(PORT, () => console.log(`Server started on PORT:${PORT}`))
+app.listen(PORT, () => console.log(`Server started on PORT:${PORT}`))
 
 http = require('http') .Server(express);
 io = require( 'socket.io')(http, {
@@ -318,6 +318,6 @@ socket.on("user_connected", (newUserId) => {
  //   console.log(onlineUsers)
   });
 });
-http. listen(3000,function() {
-console. log ('listening on *: 3000');
+http. listen(443,function() {
+console. log ('listening on *: 443');
 });
