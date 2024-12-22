@@ -47,6 +47,7 @@ if (!globalThis.crypto) {
 }
 
 const PORT = 3000
+const port = process.env.PORT || 4000;
 const app = express();
 app.use(express.static('./public'));
 app.use(cors(corsOptions))
@@ -318,6 +319,6 @@ socket.on("user_connected", (newUserId) => {
  //   console.log(onlineUsers)
   });
 });
-http. listen(3001,function() {
-console. log ('listening on *: 3001');
+http. listen(port,function() {
+console. log ('listening on *: PORT:${port}');
 });
