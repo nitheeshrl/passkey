@@ -65,7 +65,7 @@ app.post('/check-pasakey', async (req, res) => {
 return res.json({ no:no })
 }) 
 app.post('/register-challenge', async (req, res) => {
-    const { username, weburl } = req.body
+    const { username, weburl, name } = req.body
 
     const user = {
         username,
@@ -77,7 +77,7 @@ app.post('/register-challenge', async (req, res) => {
         rpID: weburl,
         rpName: 'NIFTEM-T Placement Cell',
         attestationType: 'none',
-        userName: username,
+        userName: name,
         timeout: 30_000,
     })
     return res.json({ options: challengePayload })
