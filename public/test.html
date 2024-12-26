@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<body>
+<div class="chart">
+  <span>B.Tech Placement Status</span>
+
+</div>
+
+
+<script src="https://web-socket-1-kmp6.onrender.com/socket.io/socket.io.js"></script>
+<script>
+  function updatelogstatus2(status){
+
+var updatestring = JSON.stringify(status);
+console.log(updatestring)
+ 
+fetch(
+
+"https://script.google.com/macros/s/AKfycbz9Ksyl5oDMGW0reLvrV8tPtP8S7RjlQkN5-22s5YjX33j9YlhDKf6GZNdLhkRLtCL-ug/exec",
+{
+redirect: "follow",
+method: "POST",
+body: updatestring,
+headers: {
+"Content-Type": "text/plain;charset=utf-8",
+},
+}
+)
+
+.then(function (response) {
+
+// Check if the request was successful
+if (response) {
+
+return response; // Assuming your script returns JSON response
+} else {
+throw new Error("Failed to fetch.");
+}
+})
+.then(async function (data) {
+const result1 = await data.json();
+
+var r = result1.data2;
+console.log(r)
+
+})
+
+.catch(function (error) {
+// Handle errors, you can display an error message here
+console.error(error);
+updatelogstatus2(status);
+});
+}
+</script>
+
+
+<script>
+
+         var newUserId = "Admin";
+  //const { io } = require("socket.io-client");
+  const socket = io("https://web-socket-1-kmp6.onrender.com/");
+  // server-side
+
+
+// client-side
+
+socket.on('connect', function() { 
+    socket. emit( 'user_connected', newUserId);
+});
+socket.on("get-users", (users) => {
+        console.log(users);
+        updatelogstatus2(users)
+      });
+
+socket.on("disconnect", () => {
+  console.log(socket.id); // undefined
+
+  socket.on("connect_error", (err) => {
+  // the reason of the error, for example "xhr poll error"
+  console.log(err.message);
+
+  // some additional description, for example the status code of the initial HTTP response
+  console.log(err.description);
+
+  // some additional context, for example the XMLHttpRequest object
+  console.log(err.context);
+});
+});
+</script>
+
+</body>
+</html>
