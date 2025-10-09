@@ -270,7 +270,12 @@ if (no !==0){
 
 for ( var result of results){
     console.log(result)
+try {
     webpush.sendNotification(result.subscription, message);
+}
+catch (error) {
+await conn.collection('Notifications').deleteOne({uniqueID:result.uniqueID})
+}
 }
 }
     res.json({ "statue": "Success", "message": "Message sent to push service" });
